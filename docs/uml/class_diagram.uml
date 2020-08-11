@@ -1,0 +1,50 @@
+@startuml
+class FeedPlugin {
+
+}
+
+class Feed {
+
+}
+
+class FeedTheme {
+
+}
+
+class FeedItemComment {
+  String username
+  String comment
+}
+
+
+
+class FeedItem {
+  String username
+  String[] usersLiked
+  --
+  {abstract} getUsername : String
+  {abstract} getPicture()
+  {abstract} getLikes()
+  {abstract} getComments
+}
+
+interface APIProvider {
+ {abstract} getPost(String username int postId) : FeedItem
+ {abstract} getPosts(String username, int limit) : FeedItem[]
+}
+
+class InstagramAPI {
+  getPost(String username int postId) : FeedItem
+  getPosts(String username, int limit) : FeedItem[]
+}
+
+APIProvider <|-- InstagramAPI
+
+FeedItemComment "0" o-- "*" FeedItemComment : replies
+FeedItem "0" o-- "*" FeedItemComment : comments
+
+Feed o-- APIProvider: provider
+Feed o-- FeedTheme : theme
+FeedPlugin o-- Feed : feeds
+Feed o-- FeedItem : feedItems
+@enduml
